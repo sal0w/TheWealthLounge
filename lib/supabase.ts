@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Hardcoded for deployment testing - TODO: Replace with environment variables
-const supabaseUrl = 'https://unlexdnlstwwrvtneqkb.supabase.co'
-const supabaseAnonKey = 'sb_publishable__KfzZbysy3eF49Zj0faI5g_x3Ao1aTv'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
