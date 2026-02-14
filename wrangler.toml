@@ -2,7 +2,7 @@ name = "thewealthlounge"
 compatibility_date = "2026-02-14"
 compatibility_flags = [ "nodejs_compat" ]
 
-# Environment variables for Next.js 
+# Environment variables for Next.js
 [vars]
 NEXT_PUBLIC_SUPABASE_URL = "https://unlexdnlstwwrvtneqkb.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY = "sb_publishable__KfzZbysy3eF49Zj0faI5g_x3Ao1aTv"
