@@ -6,13 +6,14 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { formatCurrency } from "@/lib/utils"
 
 export function AnnualProjectionChart() {
-    const { investments, getProjections } = useInvestments()
+    const { investments } = useInvestments()
 
-    // Aggregate projections by year
+    // Aggregate projections by year using performanceHistory from enriched investments
     const yearlyData = new Map<number, { year: number; totalValue: number; principal: number; yield: number }>()
 
     investments.forEach(inv => {
-        const projections = getProjections(inv.id)
+        // Use performanceHistory that was already loaded with the investment
+        const projections = inv.performanceHistory || []
         projections.forEach(proj => {
             const current = yearlyData.get(proj.year) || { year: proj.year, totalValue: 0, principal: 0, yield: 0 }
             yearlyData.set(proj.year, {

@@ -4,25 +4,28 @@ import { useState } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { users } from "@/lib/mock-data"
 import { CreditCard, Loader2 } from "lucide-react"
 
 export default function LoginPage() {
     const { login } = useAuth()
-    const [selectedEmail, setSelectedEmail] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState("")
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!selectedEmail) return
+        if (!email || !password) return
 
         setIsLoading(true)
+        setError("")
         try {
-            await login(selectedEmail)
-        } catch (error) {
-            console.error(error)
+            await login(email, password)
+        } catch (err) {
+            console.error(err)
+            setError(err instanceof Error ? err.message : "Invalid email or password")
             setIsLoading(false)
         }
     }
@@ -47,32 +50,44 @@ export default function LoginPage() {
             <div className="flex items-center justify-center p-8 bg-slate-950">
                 <Card className="w-full max-w-md bg-slate-900 border-slate-800 text-white shadow-2xl">
                     <CardHeader className="space-y-1">
-                        <CardTitle className="text-2xl font-bold tracking-tight">Access your Portfolio</CardTitle>
+                        <CardTitle className="text-2xl font-bold tracking-tight">Welcome Back</CardTitle>
                         <CardDescription className="text-slate-400">
-                            Select a demo account to continue
+                            Enter your credentials to access your portfolio
                         </CardDescription>
                     </CardHeader>
                     <form onSubmit={handleLogin}>
                         <CardContent className="grid gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="role" className="text-slate-200">Select User Role</Label>
-                                <div className="grid gap-2">
-                                    <Select onValueChange={setSelectedEmail} required>
-                                        <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
-                                            <SelectValue placeholder="Select a user to simulate login" />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-slate-800 border-slate-700 text-white">
-                                            {users.map(user => (
-                                                <SelectItem key={user.id} value={user.email} className="focus:bg-slate-700 focus:text-white">
-                                                    {user.name} ({user.role === 'super_user' ? 'Admin' : 'User'})
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                <Label htmlFor="email" className="text-slate-200">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                                    required
+                                />
                             </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="password" className="text-slate-200">Password</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                                    required
+                                />
+                            </div>
+                            {error && (
+                                <div className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-md p-3">
+                                    {error}
+                                </div>
+                            )}
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className="pt-6">
                             <Button
                                 type="submit"
                                 className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold"

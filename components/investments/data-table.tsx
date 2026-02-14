@@ -29,8 +29,14 @@ import {
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuTrigger,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 import { ChevronDown, SlidersHorizontal, Download } from "lucide-react"
+import { InvestmentDetailDialog } from "./investment-detail-dialog"
+import { InvestmentWithProduct } from "@/lib/types"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -45,6 +51,8 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+    const [selectedInvestment, setSelectedInvestment] = React.useState<InvestmentWithProduct | null>(null)
+    const [showDetails, setShowDetails] = React.useState(false)
 
     const table = useReactTable({
         data,
@@ -75,14 +83,84 @@ export function DataTable<TData, TValue>({
     return (
         <div className="w-full space-y-4">
             <div className="flex items-center py-4 justify-between gap-4">
-                <Input
-                    placeholder="Filter by company..."
-                    value={(table.getColumn("product_investmentCompany")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("product_investmentCompany")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm bg-slate-900 border-slate-800 text-white placeholder:text-slate-500"
-                />
+                <div className="flex items-center gap-2">
+                    <Input
+                        placeholder="Filter by company..."
+                        value={(table.getColumn("product_investmentCompany")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("product_investmentCompany")?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm bg-slate-900 border-slate-800 text-white placeholder:text-slate-500"
+                    />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="bg-slate-900 border-slate-800 text-slate-200 hover:bg-slate-800">
+                                Currency
+                                <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="bg-slate-900 border-slate-800 text-slate-200">
+                            <DropdownMenuLabel>Filter by Currency</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-slate-800" />
+                            <DropdownMenuRadioGroup
+                                value={(table.getColumn("currency")?.getFilterValue() as string) ?? "all"}
+                                onValueChange={(value) => {
+                                    table.getColumn("currency")?.setFilterValue(value === "all" ? "" : value)
+                                }}
+                            >
+                                <DropdownMenuRadioItem value="all" className="cursor-pointer">
+                                    All Currencies
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="USD" className="cursor-pointer">
+                                    USD - US Dollar
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="EUR" className="cursor-pointer">
+                                    EUR - Euro
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="GBP" className="cursor-pointer">
+                                    GBP - Pound
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="bg-slate-900 border-slate-800 text-slate-200 hover:bg-slate-800">
+                                Year
+                                <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="bg-slate-900 border-slate-800 text-slate-200">
+                            <DropdownMenuLabel>Filter by Projection Year</DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-slate-800" />
+                            <DropdownMenuRadioGroup
+                                value={(table.getColumn("projectionYears")?.getFilterValue() as string) ?? "all"}
+                                onValueChange={(value) => {
+                                    table.getColumn("projectionYears")?.setFilterValue(value === "all" ? "" : value)
+                                }}
+                            >
+                                <DropdownMenuRadioItem value="all" className="cursor-pointer">
+                                    All Years
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="2025" className="cursor-pointer">
+                                    2025
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="2026" className="cursor-pointer">
+                                    2026
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="2027" className="cursor-pointer">
+                                    2027
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="2028" className="cursor-pointer">
+                                    2028
+                                </DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="2029" className="cursor-pointer">
+                                    2029
+                                </DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
                 <div className="ml-auto flex items-center gap-2">
                     <Button
                         variant="outline"
@@ -111,7 +189,7 @@ export function DataTable<TData, TValue>({
                         <Download className="mr-2 h-4 w-4" />
                         Export
                     </Button>
-                    <DropdownMenu>
+                    {/* <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="outline" className="bg-slate-900 border-slate-800 text-slate-200 hover:bg-slate-800">
                                 <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -137,7 +215,7 @@ export function DataTable<TData, TValue>({
                                     )
                                 })}
                         </DropdownMenuContent>
-                    </DropdownMenu>
+                    </DropdownMenu> */}
                 </div>
             </div>
             <div className="rounded-md border border-slate-800 bg-slate-900 overflow-hidden">
@@ -170,7 +248,11 @@ export function DataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
-                                    className="border-slate-800 hover:bg-slate-800/50"
+                                    className="border-slate-800 hover:bg-slate-800/50 cursor-pointer transition-colors"
+                                    onClick={() => {
+                                        setSelectedInvestment(row.original as InvestmentWithProduct)
+                                        setShowDetails(true)
+                                    }}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id} className="py-3">
@@ -221,6 +303,14 @@ export function DataTable<TData, TValue>({
                     </Button>
                 </div>
             </div>
+            
+            {selectedInvestment && (
+                <InvestmentDetailDialog
+                    open={showDetails}
+                    onOpenChange={setShowDetails}
+                    investment={selectedInvestment}
+                />
+            )}
         </div>
     )
 }

@@ -1,50 +1,44 @@
-export type UserRole = "normal_user" | "super_user"
+/**
+ * @deprecated This file is deprecated. Import types directly from @/models instead.
+ * 
+ * This file remains for backward compatibility but will be removed in future versions.
+ * Please update your imports to use:
+ * - import { User, UserRole } from "@/models/user.model"
+ * - import { Product } from "@/models/product.model"  
+ * - import { Investment, InvestmentWithProduct } from "@/models/investment.model"
+ * - import { PerformanceProjection } from "@/models/performance-projection.model"
+ */
 
-export interface User {
+// Re-export types from models for backward compatibility
+export type {
+    User,
+    UserRole,
+} from "@/models/user.model"
+
+export type {
+    Product,
+} from "@/models/product.model"
+
+export type {
+    Investment,
+    InvestmentType,
+    InvestmentStatus,
+    InvestmentWithProduct,
+} from "@/models/investment.model"
+
+export type {
+    PerformanceProjection,
+} from "@/models/performance-projection.model"
+
+// Import for local use
+import type { InvestmentWithProduct } from "@/models/investment.model"
+
+// Legacy aggregated type
+export interface UserWithInvestments {
     id: string
     email: string
     name: string
-    role: UserRole
-}
-
-export interface Product {
-    id: string
-    category: string
-    investmentCompany: string
-}
-
-export interface Investment {
-    id: string
-    userId: string
-    productId: string
-    amountInvested: number
-    currency: string
-    usdEquivalent: number
-    detailsOfInvestment: string
-    expectedYield: string
-    investmentType: "Lumpsum" | "Buy and Hold" | "Lumpsum/Regular" | string
-    investmentDate: string
-    maturityDate: string | null
-    status: "active" | "matured" | "terminated"
-    contractPdf: string
-}
-
-export interface PerformanceProjection {
-    id: string
-    investmentId: string
-    year: number
-    principalAmount: number
-    yieldAmount: number
-    totalValue: number
-}
-
-// Aggregated types for UI display
-export interface InvestmentWithProduct extends Investment {
-    product: Product
-    performanceHistory?: PerformanceProjection[]
-}
-
-export interface UserWithInvestments extends User {
+    role: "normal_user" | "super_user"
     investments: InvestmentWithProduct[]
     totalInvestedUsd: number
     totalYieldUsd: number

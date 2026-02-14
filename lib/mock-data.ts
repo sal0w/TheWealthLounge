@@ -3,7 +3,7 @@ import { User, Product, Investment, PerformanceProjection, UserWithInvestments, 
 export const users: User[] = [
     {
         id: "user-1",
-        email: "john.doe@example.com",
+        email: "salowstudios@gmail.com",
         name: "John Doe",
         role: "normal_user"
     },

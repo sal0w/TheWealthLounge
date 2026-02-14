@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# Update auth context to use Supabase session management
+
+cat > lib/auth-context.tsx << 'EOF'
 "use client"
 
 import React, { createContext, useContext, useEffect, useState } from "react"
@@ -146,3 +151,6 @@ export function useAuth() {
     }
     return context
 }
+EOF
+
+echo "✅ Updated auth context to use Supabase session management"
