@@ -3,10 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  output: 'export', // Static export for Cloudflare Pages
-  images: {
-    unoptimized: true, // Required for static export
-  },
+  // Removed static export - Cloudflare Pages supports Next.js with dynamic features
+  // For Cloudflare deployment, use @cloudflare/next-on-pages or deploy directly
 };
 
 export default nextConfig;
