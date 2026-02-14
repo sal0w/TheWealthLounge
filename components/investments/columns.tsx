@@ -45,8 +45,8 @@ export const columns: ColumnDef<InvestmentWithProduct>[] = [
                 "Private Equity": 1,
                 "REIT": 2,
                 "Gold": 3,
+                "Loan Notes": 4,
                 "Loan Notes and Profit Share": 4,
-                "Loan Notes": 5,
             }
             
             const categoryA = rowA.original.product.category

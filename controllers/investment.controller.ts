@@ -115,6 +115,21 @@ export function useInvestmentController(user: User | null): InvestmentController
                 })
             )
 
+            // Sort investments by category order
+            const categoryOrder: Record<string, number> = {
+                "Private Equity": 1,
+                "REIT": 2,
+                "Gold": 3,
+                "Loan Notes": 4,
+                "Loan Notes and Profit Share": 4,
+            }
+
+            enrichedInvestments.sort((a, b) => {
+                const orderA = categoryOrder[a.product.category] || 999
+                const orderB = categoryOrder[b.product.category] || 999
+                return orderA - orderB
+            })
+
             // Calculate statistics
             const totalInvestedUsd = calculateTotalInvestedUsd(enrichedInvestments)
 
