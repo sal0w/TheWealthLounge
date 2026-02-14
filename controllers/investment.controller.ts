@@ -190,12 +190,7 @@ export function useInvestmentController(user: User | null): InvestmentController
         setError(null)
 
         try {
-            const success = await deleteInvestment(id)
-
-            if (!success) {
-                throw new Error("Investment not found")
-            }
-
+            await deleteInvestment(id)
             await fetchInvestments() // Refresh list
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : "Failed to delete investment"
